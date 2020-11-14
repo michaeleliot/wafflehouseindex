@@ -2,6 +2,9 @@ import ReactDOM from "react-dom";
 import React, { useRef, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import Popup from "./popup";
+import styles from '../styles/map.module.css'
+
+//random-points-data
 
 const formatData = locations => {
     const newFeaturesList = [];
@@ -20,7 +23,6 @@ const formatData = locations => {
             }
         });
     }
-
     return {
         type: "FeatureCollection",
         features: newFeaturesList
@@ -38,52 +40,48 @@ const Map = ({ authToken, data }) => {
             container: mapContainerRef.current,
             // See style options here: https://docs.mapbox.com/api/maps/#styles
             style: "mapbox://styles/mapbox/streets-v11",
-            center: [-90, 30],
-            zoom: 2
+            center: [-90.5795, 39.8283],
+            zoom: 3
         });
 
-        // add navigation control (zoom buttons)
         map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
 
         map.on("load", () => {
-            // add the data source for new a feature collection with no features
-            map.addSource("random-points-data", {
+            map.addSource("wafflehouse-data", {
                 type: "geojson",
                 data: {
                     type: "FeatureCollection",
                     features: []
                 }
             });
-            // now add the layer, and reference the data source above by name
+            map.getSource("wafflehouse-data").setData(formatData(data));
             map.addLayer({
-                id: "random-points-layer",
-                source: "random-points-data",
+                id: "wafflehouse-layer",
+                source: "wafflehouse-data",
                 type: "symbol",
                 layout: {
                     // full list of icons here: https://labs.mapbox.com/maki-icons
-                    "icon-image": "bakery-15", // this will put little croissants on our map
+                    "icon-image": "bakery-15",
                     "icon-padding": 0,
-                    "icon-allow-overlap": true
+                    "icon-allow-overlap": true,
+                },
+                paint: {
+                    "icon-color": " #ffffff"
                 }
             });
-            console.log(formatData(data))
-            map.getSource("random-points-data").setData(formatData(data));
         });
 
-        // change cursor to pointer when user hovers over a clickable feature
-        map.on("mouseenter", "random-points-layer", e => {
+        map.on("mouseenter", "wafflehouse-layer", e => {
             if (e.features.length) {
                 map.getCanvas().style.cursor = "pointer";
             }
         });
 
-        // reset cursor to default when user is no longer hovering over a clickable feature
-        map.on("mouseleave", "random-points-layer", () => {
+        map.on("mouseleave", "wafflehouse-layer", () => {
             map.getCanvas().style.cursor = "";
         });
 
-        // add popup when user clicks a point
-        map.on("click", "random-points-layer", e => {
+        map.on("click", "wafflehouse-layer", e => {
             if (e.features.length) {
                 const feature = e.features[0];
                 // create popup node
@@ -101,7 +99,7 @@ const Map = ({ authToken, data }) => {
         return () => map.remove();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return <div className="map-container" ref={mapContainerRef} />;
+    return <div className={styles.mapcontainer} ref={mapContainerRef} />;
 };
 
 export default Map;
