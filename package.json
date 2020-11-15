@@ -25,6 +25,7 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-jest": "^24.1.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "fs": "0.0.1-security",
     "husky": "^4.3.0",
     "immutable": "^4.0.0-rc.12",
     "jest": "^26.6.3",
