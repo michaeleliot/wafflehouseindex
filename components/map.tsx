@@ -36,7 +36,6 @@ const Map = ({ authToken }) => {
                     'source-layer': "wafflehouse-4onydw",
                     type: "symbol",
                     layout: {
-                        // full list of icons here: https://labs.mapbox.com/maki-icons
                         "icon-image": "marker",
                         "icon-padding": 0,
                         "icon-allow-overlap": true,
@@ -73,8 +72,9 @@ const Map = ({ authToken }) => {
                 const popupNode = document.createElement("div");
                 ReactDOM.render(<Popup feature={feature} />, popupNode);
                 // set popup on map
+                let coordinates = [feature.geometry.coordinates[0] + 5, feature.geometry.coordinates[1] + 23]
                 popUpRef.current
-                    .setLngLat(feature.geometry.coordinates)
+                    .setLngLat(coordinates)
                     .setDOMContent(popupNode)
                     .addTo(map);
             }
@@ -82,7 +82,7 @@ const Map = ({ authToken }) => {
 
         // clean up on unmount
         return () => map.remove();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []);
 
     return <div className={styles.mapcontainer} ref={mapContainerRef} />;
 };
