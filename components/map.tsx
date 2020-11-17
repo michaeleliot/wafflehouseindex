@@ -9,6 +9,7 @@ const Map = ({ authToken }) => {
     mapboxgl.accessToken = authToken;
     const mapContainerRef = useRef(null);
     const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+    let [feature, setFeature] = React.useState(null)
 
     // initialize map when component mounts
     useEffect(() => {
@@ -28,12 +29,12 @@ const Map = ({ authToken }) => {
                 map.addImage('marker', image, { 'sdf': true });
                 map.addSource("wafflehouse-data", {
                     'type': 'vector',
-                    'url': 'mapbox://michaeleliot.6xhri9rg'
+                    'url': 'mapbox://michaeleliot.ckhlo20gn05yj29mm432d2smz-3i5ip'
                 });
                 map.addLayer({
                     id: "wafflehouse-layer",
                     source: "wafflehouse-data",
-                    'source-layer': "wafflehouse-4onydw",
+                    'source-layer': "wafflehouse",
                     type: "symbol",
                     layout: {
                         "icon-image": "marker",
@@ -44,9 +45,10 @@ const Map = ({ authToken }) => {
                         "icon-color": [
                             "match",
                             ['get', 'status'],
-                            'Good', "#7CFC00",
-                            'Medium', "#ff5733",
-                            "#f6ff33"
+                            'Good', "#68d391",
+                            'Medium', "#f6e05e",
+                            "Bad", "#fc8181",
+                            "#FFFFFF"
                         ]
                     }
                 });
@@ -68,15 +70,17 @@ const Map = ({ authToken }) => {
         map.on("click", "wafflehouse-layer", e => {
             if (e.features.length) {
                 const feature = e.features[0];
-                // create popup node
-                const popupNode = document.createElement("div");
-                ReactDOM.render(<Popup feature={feature} />, popupNode);
-                // set popup on map
-                let coordinates = [feature.geometry.coordinates[0] + 5, feature.geometry.coordinates[1] + 23]
-                popUpRef.current
-                    .setLngLat(coordinates)
-                    .setDOMContent(popupNode)
-                    .addTo(map);
+                console.log(feature)
+                setFeature(feature)
+                // // create popup node
+                // const popupNode = document.createElement("div");
+                // ReactDOM.render(<Popup feature={feature} />, popupNode);
+                // // set popup on map
+                // let coordinates = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]]
+                // popUpRef.current
+                //     .setLngLat(coordinates)
+                //     .setDOMContent(popupNode)
+                //     .addTo(map);
             }
         });
 
@@ -84,7 +88,12 @@ const Map = ({ authToken }) => {
         return () => map.remove();
     }, []);
 
-    return <div className={styles.mapcontainer} ref={mapContainerRef} />;
+    return (
+        <div>
+            <div> {feature != null ? feature.properties.name + ", " + feature.properties.location : "Select a waffle house to see details!"} </div>
+            <div className={styles.mapcontainer} ref={mapContainerRef} />
+        </div>
+    )
 };
 
 export default Map;
