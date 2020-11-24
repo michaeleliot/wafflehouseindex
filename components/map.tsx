@@ -53,8 +53,6 @@ const Map = ({ authToken }) => {
                     }
                 });
             })
-
-
         });
 
         map.on("mouseenter", "wafflehouse-layer", e => {
