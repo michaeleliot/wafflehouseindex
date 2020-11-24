@@ -8,7 +8,16 @@ export default async (req, res) => {
   const formatData = (locations) => {
     const newFeaturesList = [];
     for (let location of locations) {
-      const { id, lat, lng, name, is_temporarily_closed, address, city, state } = location;
+      const {
+        id,
+        lat,
+        lng,
+        name,
+        is_temporarily_closed,
+        address,
+        city,
+        state,
+      } = location;
       let status = 'Bad';
       if (is_temporarily_closed == null) {
         status = 'Good';
@@ -24,7 +33,7 @@ export default async (req, res) => {
         properties: {
           id,
           name: name,
-          location: address + ", " + city + ", " + state,
+          location: address + ', ' + city + ', ' + state,
           status,
         },
       });

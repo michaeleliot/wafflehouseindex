@@ -4,10 +4,10 @@ import Map from '../components/map';
 import React from 'react';
 import TopBar from '../components/topbar';
 import About from '../components/about';
-import url from '../constants/url'
+import url from '../constants/url';
 
 export default function Home({ token, data }) {
-  console.log(data)
+  console.log(data);
   const green = data.features.filter(
     (location) => location.properties.status == 'Good',
   ).length;
@@ -37,15 +37,17 @@ export default function Home({ token, data }) {
           <Map authToken={token} />
         </div>
       ) : (
-          <About />
-        )}
+        <About />
+      )}
     </React.Fragment>
   );
 }
 
 export async function getServerSideProps() {
-  let res = await fetch(url + '/api/data').then(data => data.json()).then(data => data)
-  let data = res.data
+  let res = await fetch(url + '/api/data')
+    .then((data) => data.json())
+    .then((data) => data);
+  let data = res.data;
   return {
     props: {
       token: process.env.MapboxAccessToken,
