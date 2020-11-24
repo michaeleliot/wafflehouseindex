@@ -7,7 +7,6 @@ import About from '../components/about';
 import url from '../constants/url';
 
 export default function Home({ token, data }) {
-  console.log(data);
   const green = data.features.filter(
     (location) => location.properties.status == 'Good',
   ).length;

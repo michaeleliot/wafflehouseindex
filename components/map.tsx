@@ -68,7 +68,6 @@ const Map = ({ authToken }) => {
         map.on("click", "wafflehouse-layer", e => {
             if (e.features.length) {
                 const feature = e.features[0];
-                console.log(feature)
                 setFeature(feature)
                 // // create popup node
                 // const popupNode = document.createElement("div");
