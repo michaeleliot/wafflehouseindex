@@ -87,7 +87,7 @@ const Map = ({ authToken }) => {
 
     return (
         <div>
-            <div> {feature != null ? feature.properties.name + ", " + feature.properties.location : "Select a waffle house to see details!"} </div>
+            <div className={'text-center'}> {feature != null ? feature.properties.name + ", " + feature.properties.location : "Select a waffle house to see details!"} </div>
             <div className={styles.mapcontainer} ref={mapContainerRef} />
         </div>
     )
